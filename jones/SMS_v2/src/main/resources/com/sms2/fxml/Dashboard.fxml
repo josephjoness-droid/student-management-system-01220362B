@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml"
+      fx:controller="com.sms2.ui.controllers.MainController"
+      stylesheets="@../css/theme.css"
+      prefWidth="1200" prefHeight="760"
+      spacing="0">
+
+    <!-- ══════════════════════════════════════════════════════
+         TOP NAVIGATION BAR
+    ══════════════════════════════════════════════════════ -->
+    <HBox styleClass="topnav" alignment="CENTER_LEFT" spacing="0">
+        <!-- Brand -->
+        <HBox styleClass="brand-box" alignment="CENTER_LEFT" spacing="10">
+            <Label text="▣" styleClass="brand-icon"/>
+            <VBox spacing="0">
+                <Label text="AcaTrack" styleClass="brand-name"/>
+                <Label text="Student Management System" styleClass="brand-sub"/>
+            </VBox>
+        </HBox>
+
+        <!-- Nav Tabs -->
+        <HBox styleClass="nav-tabs" alignment="CENTER_LEFT" spacing="2" HBox.hgrow="ALWAYS">
+            <Button fx:id="navHome"     text="Home"          onAction="#showHome"      styleClass="nav-tab,nav-tab-active"/>
+            <Button fx:id="navStudents" text="Students"      onAction="#showStudents"  styleClass="nav-tab"/>
+            <Button fx:id="navReports"  text="Reports"       onAction="#showReports"   styleClass="nav-tab"/>
+            <Button fx:id="navImport"   text="Import/Export" onAction="#showImportExport" styleClass="nav-tab"/>
+            <Button fx:id="navSettings" text="Settings"      onAction="#showSettings"  styleClass="nav-tab"/>
+        </HBox>
+
+        <!-- Right side status -->
+        <HBox spacing="16" alignment="CENTER_RIGHT" styleClass="nav-right">
+            <Label fx:id="lblClock" styleClass="nav-clock"/>
+            <Label text="● Offline" styleClass="status-offline"/>
+        </HBox>
+    </HBox>
+
+    <!-- ══════════════════════════════════════════════════════
+         MAIN CONTENT (switches between pages)
+    ══════════════════════════════════════════════════════ -->
+    <StackPane VBox.vgrow="ALWAYS" styleClass="main-content">
+
+        <!-- ─── HOME PAGE ─── -->
+        <ScrollPane fx:id="homePage" fitToWidth="true" styleClass="scroll-clean">
+            <VBox spacing="28" styleClass="page-body">
+                <padding><Insets top="32" right="36" bottom="32" left="36"/></padding>
+
+                <!-- Welcome banner -->
+                <HBox styleClass="welcome-banner" alignment="CENTER_LEFT" spacing="20">
+                    <VBox spacing="6">
+                        <Label text="Welcome to AcaTrack" styleClass="welcome-title"/>
+                        <Label text="Your department's student record management system — fast, offline, and reliable." styleClass="welcome-sub"/>
+                    </VBox>
+                    <Region HBox.hgrow="ALWAYS"/>
+                    <Label text="📋" style="-fx-font-size:48px;"/>
+                </HBox>
+
+                <!-- KPI Cards Row -->
+                <Label text="Overview" styleClass="section-heading"/>
+                <HBox spacing="16">
+                    <VBox styleClass="kpi-card kpi-teal" HBox.hgrow="ALWAYS">
+                        <Label text="TOTAL STUDENTS" styleClass="kpi-label"/>
+                        <Label fx:id="kpiTotal" text="0" styleClass="kpi-value"/>
+                        <Label text="All records" styleClass="kpi-foot"/>
+                    </VBox>
+                    <VBox styleClass="kpi-card kpi-green" HBox.hgrow="ALWAYS">
+                        <Label text="ACTIVE" styleClass="kpi-label"/>
+                        <Label fx:id="kpiActive" text="0" styleClass="kpi-value"/>
+                        <Label text="Currently enrolled" styleClass="kpi-foot"/>
+                    </VBox>
+                    <VBox styleClass="kpi-card kpi-amber" HBox.hgrow="ALWAYS">
+                        <Label text="INACTIVE" styleClass="kpi-label"/>
+                        <Label fx:id="kpiInactive" text="0" styleClass="kpi-value"/>
+                        <Label text="Not enrolled" styleClass="kpi-foot"/>
+                    </VBox>
+                    <VBox styleClass="kpi-card kpi-blue" HBox.hgrow="ALWAYS">
+                        <Label text="AVERAGE GPA" styleClass="kpi-label"/>
+                        <Label fx:id="kpiAvgGpa" text="0.00" styleClass="kpi-value"/>
+                        <Label text="Dept. average" styleClass="kpi-foot"/>
+                    </VBox>
+                </HBox>
+
+                <!-- Quick Actions -->
+                <Label text="Quick Actions" styleClass="section-heading"/>
+                <HBox spacing="14">
+                    <VBox styleClass="action-card" onMouseClicked="#showStudents" prefWidth="200">
+                        <Label text="👤" styleClass="action-icon"/>
+                        <Label text="Manage Students" styleClass="action-title"/>
+                        <Label text="Add, edit, delete records" styleClass="action-desc"/>
+                    </VBox>
+                    <VBox styleClass="action-card" onMouseClicked="#showReports" prefWidth="200">
+                        <Label text="📊" styleClass="action-icon"/>
+                        <Label text="View Reports" styleClass="action-title"/>
+                        <Label text="Analytics and insights" styleClass="action-desc"/>
+                    </VBox>
+                    <VBox styleClass="action-card" onMouseClicked="#showImportExport" prefWidth="200">
+                        <Label text="📁" styleClass="action-icon"/>
+                        <Label text="Import / Export" styleClass="action-title"/>
+                        <Label text="CSV data management" styleClass="action-desc"/>
+                    </VBox>
+                    <VBox styleClass="action-card" onMouseClicked="#showSettings" prefWidth="200">
+                        <Label text="⚙️" styleClass="action-icon"/>
+                        <Label text="Settings" styleClass="action-title"/>
+                        <Label text="Configure thresholds" styleClass="action-desc"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+
+        <!-- ─── STUDENTS PAGE ─── -->
+        <VBox fx:id="studentsPage" spacing="0" styleClass="page-body" visible="false" managed="false">
+
+            <!-- Page Header -->
+            <HBox styleClass="page-header" alignment="CENTER_LEFT" spacing="14">
+                <VBox spacing="3">
+                    <Label text="Students" styleClass="page-title"/>
+                    <Label fx:id="lblStudentCount" text="0 records" styleClass="page-sub"/>
+                </VBox>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="+ Add Student" onAction="#onAddStudent" styleClass="btn-add"/>
+            </HBox>
+
+            <!-- Toolbar -->
+            <HBox styleClass="toolbar" alignment="CENTER_LEFT" spacing="10">
+                <TextField fx:id="txtSearch" promptText="🔍  Search by ID or name…" prefWidth="280" styleClass="search-box"/>
+                <Button text="Search" onAction="#onSearch" styleClass="btn-teal"/>
+                <Separator orientation="VERTICAL" styleClass="toolbar-sep"/>
+                <Label text="Filter:" styleClass="filter-label"/>
+                <ComboBox fx:id="cboProgramme" promptText="Programme" prefWidth="155" styleClass="filter-combo"/>
+                <ComboBox fx:id="cboLevel"     promptText="Level"     prefWidth="85"  styleClass="filter-combo"/>
+                <ComboBox fx:id="cboStatus"    promptText="Status"    prefWidth="100" styleClass="filter-combo"/>
+                <Button text="Clear" onAction="#onClearFilter" styleClass="btn-ghost"/>
+                <Region HBox.hgrow="ALWAYS"/>
+                <Button text="↑ Name"   onAction="#onSortByName"   styleClass="btn-ghost"/>
+                <Button text="GPA ▲"    onAction="#onSortGpaAsc"   styleClass="btn-ghost"/>
+                <Button text="GPA ▼"    onAction="#onSortGpaDesc"  styleClass="btn-ghost"/>
+                <Button text="⟳"        onAction="#onRefresh"      styleClass="btn-ghost"/>
+            </HBox>
+
+            <!-- Table -->
+            <TableView fx:id="studentTable" VBox.vgrow="ALWAYS" styleClass="data-table">
+                <columns>
+                    <TableColumn fx:id="colId"     text="Student ID"   prefWidth="120"/>
+                    <TableColumn fx:id="colName"   text="Full Name"    prefWidth="200"/>
+                    <TableColumn fx:id="colProg"   text="Programme"    prefWidth="170"/>
+                    <TableColumn fx:id="colLevel"  text="Level"        prefWidth="65"/>
+                    <TableColumn fx:id="colGpa"    text="GPA"          prefWidth="65"/>
+                    <TableColumn fx:id="colEmail"  text="Email"        prefWidth="200"/>
+                    <TableColumn fx:id="colPhone"  text="Phone"        prefWidth="110"/>
+                    <TableColumn fx:id="colDate"   text="Added"        prefWidth="95"/>
+                    <TableColumn fx:id="colStatus" text="Status"       prefWidth="85"/>
+                </columns>
+            </TableView>
+
+            <!-- Action bar below table -->
+            <HBox styleClass="action-bar" alignment="CENTER_LEFT" spacing="10">
+                <Button text="✏️  Edit Selected"   onAction="#onEditStudent"   styleClass="btn-outline"/>
+                <Button text="🗑  Delete Selected"  onAction="#onDeleteStudent" styleClass="btn-outline-danger"/>
+            </HBox>
+        </VBox>
+
+        <!-- ─── REPORTS PAGE ─── -->
+        <VBox fx:id="reportsPage" spacing="0" styleClass="page-body" visible="false" managed="false">
+            <HBox styleClass="page-header" alignment="CENTER_LEFT">
+                <VBox spacing="3">
+                    <Label text="Reports &amp; Analytics" styleClass="page-title"/>
+                    <Label text="Data-driven insights for your department" styleClass="page-sub"/>
+                </VBox>
+            </HBox>
+            <TabPane fx:id="reportTabs" VBox.vgrow="ALWAYS" styleClass="report-tabs">
+                <Tab text="🏆  Top Performers"     fx:id="tabTop"  closable="false"/>
+                <Tab text="⚠️  At-Risk Students"   fx:id="tabRisk" closable="false"/>
+                <Tab text="📊  GPA Distribution"   fx:id="tabDist" closable="false"/>
+                <Tab text="🎓  Programme Summary"  fx:id="tabProg" closable="false"/>
+            </TabPane>
+        </VBox>
+
+        <!-- ─── IMPORT/EXPORT PAGE ─── -->
+        <ScrollPane fx:id="importExportPage" fitToWidth="true" styleClass="scroll-clean" visible="false" managed="false">
+            <VBox spacing="22" styleClass="page-body">
+                <padding><Insets top="0" right="0" bottom="32" left="0"/></padding>
+
+                <HBox styleClass="page-header" alignment="CENTER_LEFT">
+                    <VBox spacing="3">
+                        <Label text="Import / Export" styleClass="page-title"/>
+                        <Label text="Bulk data operations — all files saved to the data/ folder" styleClass="page-sub"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="22" styleClass="ie-body">
+                    <!-- Import Card -->
+                    <VBox styleClass="ie-card" HBox.hgrow="ALWAYS" spacing="14">
+                        <Label text="⬆  Import from CSV" styleClass="ie-card-title"/>
+                        <Label text="Upload a CSV file. Invalid rows are skipped and logged automatically." styleClass="ie-card-desc" wrapText="true"/>
+                        <HBox spacing="10" alignment="CENTER_LEFT">
+                            <TextField fx:id="txtImportPath" promptText="No file selected…" HBox.hgrow="ALWAYS" editable="false" styleClass="path-field"/>
+                            <Button text="Browse" onAction="#onBrowseImport" styleClass="btn-outline"/>
+                        </HBox>
+                        <Button text="Start Import" onAction="#onImport" styleClass="btn-teal" maxWidth="Infinity"/>
+                        <Separator/>
+                        <HBox spacing="16">
+                            <Label fx:id="lblImportSuccess" text="" styleClass="result-success"/>
+                            <Label fx:id="lblImportErrors"  text="" styleClass="result-error"/>
+                        </HBox>
+                    </VBox>
+
+                    <!-- Export Card -->
+                    <VBox styleClass="ie-card" HBox.hgrow="ALWAYS" spacing="14">
+                        <Label text="⬇  Export to CSV" styleClass="ie-card-title"/>
+                        <Label text="Download student data as CSV files. Saved to data/ folder." styleClass="ie-card-desc" wrapText="true"/>
+                        <Button text="Export All Students"         onAction="#onExportAll"           styleClass="export-btn" maxWidth="Infinity"/>
+                        <Button text="Export Top Performers"       onAction="#onExportTopPerformers" styleClass="export-btn" maxWidth="Infinity"/>
+                        <Button text="Export At-Risk Students"     onAction="#onExportAtRisk"        styleClass="export-btn" maxWidth="Infinity"/>
+                        <Separator/>
+                        <Label fx:id="lblExportStatus" text="" styleClass="result-success" wrapText="true"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+        </ScrollPane>
+
+        <!-- ─── SETTINGS PAGE ─── -->
+        <ScrollPane fx:id="settingsPage" fitToWidth="true" styleClass="scroll-clean" visible="false" managed="false">
+            <VBox spacing="22" styleClass="page-body">
+                <padding><Insets top="0" right="0" bottom="32" left="0"/></padding>
+
+                <HBox styleClass="page-header" alignment="CENTER_LEFT">
+                    <VBox spacing="3">
+                        <Label text="Settings" styleClass="page-title"/>
+                        <Label text="Configure application behaviour" styleClass="page-sub"/>
+                    </VBox>
+                </HBox>
+
+                <VBox styleClass="settings-body" spacing="22">
+                    <VBox styleClass="settings-block" spacing="12">
+                        <Label text="At-Risk GPA Threshold" styleClass="settings-block-title"/>
+                        <Label text="Students whose GPA falls below this value are included in the At-Risk report." wrapText="true" styleClass="settings-block-desc"/>
+                        <HBox spacing="12" alignment="CENTER_LEFT">
+                            <Label text="Threshold value:"/>
+                            <TextField fx:id="txtThreshold" text="2.0" prefWidth="90" styleClass="settings-field"/>
+                            <Button text="Save Threshold" onAction="#onSaveThreshold" styleClass="btn-teal"/>
+                            <Label fx:id="lblThresholdMsg" text="" styleClass="result-success"/>
+                        </HBox>
+                    </VBox>
+                </VBox>
+            </VBox>
+        </ScrollPane>
+
+    </StackPane>
+
+    <!-- ══════════════════════════════════════════════════════
+         STATUS BAR
+    ══════════════════════════════════════════════════════ -->
+    <HBox styleClass="statusbar" alignment="CENTER_LEFT" spacing="16">
+        <Label text="AcaTrack v1.0.0" styleClass="sb-version"/>
+        <Label text="|" styleClass="sb-sep"/>
+        <Label fx:id="lblStatusMsg" text="Ready" styleClass="sb-msg"/>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Label text="Database: SQLite  ·  Platform: Windows Offline" styleClass="sb-info"/>
+    </HBox>
+
+</VBox>

@@ -1,0 +1,16 @@
+========================================
+  AcaTrack – Student Management System Plus
+  Run Instructions for Windows
+========================================
+
+JDK Version: JDK 21
+
+MAIN CLASS:  com.sms2.MainApp
+
+VM OPTIONS:
+--module-path "C:\javafx\javafx-sdk-21\lib" --add-modules javafx.controls,javafx.fxml
+
+FULL RUN COMMAND:
+java --module-path "C:\javafx\javafx-sdk-21\lib" --add-modules javafx.controls,javafx.fxml -jar AcaTrack.jar
+
+NOTE: Replace the path with wherever you extracted your JavaFX SDK.
